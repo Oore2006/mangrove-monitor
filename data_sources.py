@@ -9,6 +9,7 @@ placeholder or the professor's dataset — that decision is made entirely in
 config.py.
 """
 
+import json
 import ee
 import datetime
 import config
