@@ -14,12 +14,25 @@ import ee
 import datetime
 import config
 import streamlit as st
+from google.oauth2 import service_account
+# import config
 
+
+# def initialize_earth_engine():
+#     if "gee_service_account" in st.secrets:
 def initialize_earth_engine():
-    if "gee_service_account" in st.secrets:
+    try:
+        has_secrets = "gee_service_account" in st.secrets
+    except Exception:
+        has_secrets = False
+
+    if has_secrets:
         # Deployed on Streamlit Cloud — credentials come from secrets, not a file
         info = dict(st.secrets["gee_service_account"])
-        credentials = ee.ServiceAccountCredentials(info["client_email"], key_data=json.dumps(info))
+        credentials = service_account.Credentials.from_service_account_info(
+            info,
+            scopes=["https://www.googleapis.com/auth/earthengine"],
+        )
         ee.Initialize(credentials, project=config.GEE_PROJECT)
     elif config.GEE_SERVICE_ACCOUNT_EMAIL and config.GEE_SERVICE_ACCOUNT_KEY_PATH:
         # Local development — credentials come from key.json
@@ -28,7 +41,26 @@ def initialize_earth_engine():
         )
         ee.Initialize(credentials, project=config.GEE_PROJECT)
     else:
-        ee.Initialize(project=config.GEE_PROJECT)
+        try:
+            ee.Initialize(project=config.GEE_PROJECT)
+        except Exception:
+            ee.Authenticate()
+            ee.Initialize(project=config.GEE_PROJECT)
+
+# def initialize_earth_engine():
+#     if "gee_service_account" in st.secrets:
+#         # Deployed on Streamlit Cloud — credentials come from secrets, not a file
+#         info = dict(st.secrets["gee_service_account"])
+#         credentials = ee.ServiceAccountCredentials(info["client_email"], key_data=json.dumps(info))
+#         ee.Initialize(credentials, project=config.GEE_PROJECT)
+#     elif config.GEE_SERVICE_ACCOUNT_EMAIL and config.GEE_SERVICE_ACCOUNT_KEY_PATH:
+#         # Local development — credentials come from key.json
+#         credentials = ee.ServiceAccountCredentials(
+#             config.GEE_SERVICE_ACCOUNT_EMAIL, config.GEE_SERVICE_ACCOUNT_KEY_PATH
+#         )
+#         ee.Initialize(credentials, project=config.GEE_PROJECT)
+#     else:
+#         ee.Initialize(project=config.GEE_PROJECT)
 
 
 

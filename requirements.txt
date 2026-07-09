@@ -2,3 +2,5 @@ streamlit>=1.32
 earthengine-api>=0.1.400
 folium>=0.15
 streamlit-folium>=0.20
+
+

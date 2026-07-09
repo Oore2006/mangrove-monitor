@@ -21,7 +21,7 @@ service account, and mangrove dataset. Nothing else in the app needs to change.
 
 
 
-GEE_SERVICE_ACCOUNT_EMAIL = "mangrove-monitor-app@mangrove-monitor-501613.iam.gserviceaccount.com"
+GEE_SERVICE_ACCOUNT_EMAIL = "mangrove-monitor-app2@mangrove-monitor-501613.iam.gserviceaccount.com"
 GEE_SERVICE_ACCOUNT_KEY_PATH = "key.json"
 
 
